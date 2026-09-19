@@ -249,7 +249,7 @@
     /* Аккуратный заголовок над видео (НЕ перекрывает видео!) */
     .brand-top-caption {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       margin-bottom: 8px;
       padding: 0 4px;
@@ -261,28 +261,11 @@
       font-weight: 700;
       color: var(--cyan-neon);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .brand-top-caption .music-btn {
-      background: rgba(0, 242, 254, 0.12);
-      border: 1px solid rgba(0, 242, 254, 0.35);
-      color: #ffffff;
-      font-family: var(--font-heading);
-      font-size: 10px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.2s ease;
-    }
-
-    .brand-top-caption .music-btn:hover {
-      background: rgba(0, 242, 254, 0.25);
-      border-color: var(--cyan-neon);
+      letter-spacing: 0.8px;
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.22);
+      padding: 4px 14px;
+      border-radius: 20px;
     }
 
     /* Чистый видеобокс 16:9 без нависающих сверху табличек */
@@ -1353,7 +1336,7 @@
     <header class="top-status-bar">
       <div class="status-live">
         <div class="pulse-dot"></div>
-        <span>24/7 Выезд</span>
+        <span>Прием заявок</span>
       </div>
       <a href="https://vizitka-liga-masterov.vercel.app/" class="status-vip-badge" title="Визитка ведущего инженера сантехники">
         <span>💳 Визитка инженера</span>
@@ -1375,13 +1358,9 @@
 
     <!-- HERO СЕКЦИЯ -->
     <section class="hero-section">
-      <!-- Аккуратная строчка статуса и кнопка музыки НАД видео (видео не перекрывается!) -->
+      <!-- Аккуратная строчка статуса НАД видео (видео не перекрывается) -->
       <div class="brand-top-caption">
         <span class="caption-text">✨ Лига Опытных Мастеров • 2026</span>
-        <button class="music-btn" id="brandMusicBtn" type="button" onclick="toggleBrandMusic()">
-          <span id="brandMusicIcon">🎵</span>
-          <span id="brandMusicText">Мелодия</span>
-        </button>
       </div>
 
       <!-- ЧИСТОЕ 3D Видео 16:9 с музыкой (без перекрывающих надписей) -->
@@ -1878,38 +1857,7 @@
     /* ==========================================================================
        МЕЛОДИЯ ДЛЯ ПЕРВОГО АНИМИРОВАННОГО ВИДЕО 16:9
        ========================================================================== */
-    const brandVideo = document.getElementById('brandVideo');
-    const brandMusicBtn = document.getElementById('brandMusicBtn');
-    const brandMusicIcon = document.getElementById('brandMusicIcon');
-    const brandMusicText = document.getElementById('brandMusicText');
 
-    function toggleBrandMusic() {
-      if (!brandVideo) return;
-      if (brandVideo.muted) {
-        // Останавливаем озвучку героя и дизайнерское видео
-        if (isAudioPlaying) {
-          stopAudioPlayback(false);
-        }
-        if (typeof designerVideoPlayer !== 'undefined' && designerVideoPlayer && !designerVideoPlayer.paused) {
-          designerVideoPlayer.pause();
-          designerPlayOverlay.classList.remove('hidden');
-        }
-
-        brandVideo.muted = false;
-        brandVideo.play().then(() => {
-          brandMusicIcon.textContent = '🔊';
-          brandMusicText.textContent = 'Музыка вкл';
-          brandMusicBtn.style.background = 'rgba(0, 245, 160, 0.25)';
-          brandMusicBtn.style.borderColor = 'var(--emerald-neon)';
-        }).catch(e => console.log(e));
-      } else {
-        brandVideo.muted = true;
-        brandMusicIcon.textContent = '🎵';
-        brandMusicText.textContent = 'Мелодия';
-        brandMusicBtn.style.background = 'rgba(0, 242, 254, 0.12)';
-        brandMusicBtn.style.borderColor = 'rgba(0, 242, 254, 0.35)';
-      }
-    }
 
     /* ==========================================================================
        SMART AUDIO SYSTEM: ОДНОКРАТНАЯ ОЗВУЧКА И АВТО-ПАУЗА ПРИ СКРОЛЛЕ
@@ -1949,10 +1897,6 @@
       if (isAudioPlaying) {
         stopAudioPlayback(false);
       } else {
-        // Глушим фоновую музыку и дизайнерский плеер
-        if (brandVideo && !brandVideo.muted) {
-          toggleBrandMusic();
-        }
         if (typeof designerVideoPlayer !== 'undefined' && designerVideoPlayer && !designerVideoPlayer.paused) {
           designerVideoPlayer.pause();
           designerPlayOverlay.classList.remove('hidden');
@@ -2005,10 +1949,6 @@
             }
             if (!heroVideo.paused) {
               heroVideo.pause();
-            }
-            // Также глушим фоновую музыку 16:9 видео, если ушли вниз
-            if (brandVideo && !brandVideo.muted) {
-              toggleBrandMusic();
             }
           } else {
             if (heroVideo.paused) {
