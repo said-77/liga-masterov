@@ -10,11 +10,11 @@
   <!-- Open Graph / Telegram / WhatsApp / Facebook -->
   <meta property="og:site_name" content="Лига Опытных Мастеров">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://liga-opytnykh-masterov-uz.netlify.app/">
+  <meta property="og:url" content="https://liga-masterov.vercel.app/">
   <meta property="og:title" content="Лига Опытных Мастеров • Ташкент">
   <meta property="og:description" content="Премиальный монтаж инженерной сантехники и котельных для дизайн-проектов в Ташкенте. Точность Geberit до 1 мм, опрессовка 16 бар.">
-  <meta property="og:image" content="https://liga-opytnykh-masterov-uz.netlify.app/media/banner_slide_gold_emblem.jpg">
-  <meta property="og:image:secure_url" content="https://liga-opytnykh-masterov-uz.netlify.app/media/banner_slide_gold_emblem.jpg">
+  <meta property="og:image" content="https://liga-masterov.vercel.app/media/banner_slide_gold_emblem.jpg?v=2026">
+  <meta property="og:image:secure_url" content="https://liga-masterov.vercel.app/media/banner_slide_gold_emblem.jpg?v=2026">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,10 +22,10 @@
 
   <!-- Twitter Card / Telegram Large Preview -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://liga-opytnykh-masterov-uz.netlify.app/">
+  <meta name="twitter:url" content="https://liga-masterov.vercel.app/">
   <meta name="twitter:title" content="Лига Опытных Мастеров • Ташкент">
   <meta name="twitter:description" content="Премиальный монтаж инженерной сантехники и котельных для дизайн-проектов в Ташкенте. Точность Geberit до 1 мм, опрессовка 16 бар.">
-  <meta name="twitter:image" content="https://liga-opytnykh-masterov-uz.netlify.app/media/banner_slide_gold_emblem.jpg">
+  <meta name="twitter:image" content="https://liga-masterov.vercel.app/media/banner_slide_gold_emblem.jpg?v=2026">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -371,6 +371,63 @@
       display: flex;
       align-items: center;
       gap: 6px;
+    }
+
+    /* Фирменный золотой шильдик Лиги Мастеров поверх наклейки на видео */
+    .video-brand-shield {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 132px;
+      padding: 6px 6px 8px;
+      background: linear-gradient(180deg, #0e131d 0%, #060910 100%);
+      border: 1.5px solid rgba(212, 163, 89, 0.55);
+      border-top: none;
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 163, 89, 0.25);
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .video-brand-shield .shield-diamond {
+      position: relative;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .video-brand-shield .shield-monogram {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffd175;
+    }
+
+    .video-brand-shield .shield-title {
+      font-family: var(--font-heading);
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #ffd175;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .video-brand-shield .shield-city {
+      font-size: 7px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: var(--gold-primary);
     }
 
     /* Полноценный пульт управления озвучкой прямо под видео */
@@ -1296,8 +1353,8 @@
         <div class="pulse-dot"></div>
         <span>24/7 Выезд</span>
       </div>
-      <a href="card.html" class="status-vip-badge" title="Открыть интерактивную 3D стерео-визитку мастера">
-        <span>💳 3D Визитка</span>
+      <a href="https://vizitka-liga-masterov.vercel.app/" class="status-vip-badge" title="Визитка ведущего инженера сантехники">
+        <span>💳 Визитка инженера</span>
       </a>
       <div class="status-location">
         <span>📍 Ташкент</span>
@@ -1327,7 +1384,7 @@
 
       <!-- ЧИСТОЕ 3D Видео 16:9 с музыкой (без перекрывающих надписей) -->
       <div class="brand-video-box">
-        <video id="brandVideo" src="media/hero_brand_16x9.mp4" autoplay loop muted playsinline webkit-playsinline poster="media/logo.png" onerror="handleMediaError(this)"></video>
+        <video id="brandVideo" src="media/banner_lenticular_soviet.mp4" autoplay loop muted playsinline webkit-playsinline poster="media/banner_slide_gold_emblem.jpg" onerror="handleMediaError(this)"></video>
       </div>
 
       <!-- Оффер для Заказчиков -->
@@ -1362,7 +1419,20 @@
           </div>
         </div>
 
-        <video id="mainHeroVideo" src="media/work_vertical_9x16.mp4" autoplay loop muted playsinline webkit-playsinline poster="media/collector_unit.jpg" onerror="handleMediaError(this)"></video>
+        <!-- Фирменный золотой шильдик Лиги Мастеров -->
+        <div class="video-brand-shield">
+          <div class="shield-diamond">
+            <svg viewBox="0 0 100 100" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+              <polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#ffd175" stroke-width="3.5" />
+              <polygon points="50,14 86,50 50,86 14,50" fill="none" stroke="#d4a359" stroke-width="1.8" />
+            </svg>
+            <div class="shield-monogram">LM</div>
+          </div>
+          <div class="shield-title">ЛИГА МАСТЕРОВ</div>
+          <div class="shield-city">• ТАШКЕНТ •</div>
+        </div>
+
+        <video id="mainHeroVideo" src="media/work_vertical_9x16.mp4?v=2026_pure" autoplay loop muted playsinline webkit-playsinline poster="media/collector_unit.jpg?v=2026_pure" onerror="handleMediaError(this)"></video>
       </div>
 
       <!-- Умный пульт управления озвучкой: воспроизводит ровно 1 раз и глушит звук при скролле -->
@@ -1636,7 +1706,7 @@
       <article class="glass-card master-card">
         <div class="master-header">
           <div class="master-avatar-wrap">
-            <img src="media/logo.png" alt="Официальный знак Лиги Опытных Мастеров" onerror="handleMediaError(this)">
+            <img src="media/banner_slide_gold_emblem.jpg" alt="Официальный знак Лиги Опытных Мастеров" onerror="handleMediaError(this)">
           </div>
           <div>
             <div class="master-name">Улугбек Хакимов</div>
