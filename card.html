@@ -1350,24 +1350,29 @@
         let autoTime = 0;
         let isTouching = false;
         let baseGamma = null;
-        let currentMode = 'master'; // По умолчанию четко показываем личную VIP-карту Улугбека Хакимова!
+        let currentMode = 'auto'; // По умолчанию Авто 3D переливание!
 
-        // 3D-движок рендеринга и оптического переключения
+        // Идеальный оптический 3D-переход (Specular Light Flash Wipe - без мути и наложения букв)
         function updateLenticular(tiltX, tiltY) {
             tiltX = Math.max(-1, Math.min(1, tiltX));
             tiltY = Math.max(-1, Math.min(1, tiltY));
 
             // Прецизионный 3D поворот
-            const rotateY = tiltX * 14; 
+            const rotateY = tiltX * 15; 
             const rotateX = -tiltY * 8; 
             card.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateZ(0)`;
 
-            // Золотистый зеркальный блик
-            const glareX = (-tiltX * 85);
-            const glareY = (-tiltY * 85);
+            // Золотистый зеркальный луч-блик
+            // При прохождении через центр блик вспыхивает ярче, маскируя смену кадров
+            const centerDist = Math.abs(tiltX);
+            const flash = Math.max(0, 1.0 - centerDist * 3.8); // Пик при tiltX ≈ 0
+            const glareOpacity = 0.15 + (flash * 0.65) + (centerDist * 0.15);
+
+            const glareX = (-tiltX * 110);
+            const glareY = (-tiltY * 90);
             card.style.setProperty('--glare-x', `${glareX}%`);
             card.style.setProperty('--glare-y', `${glareY}%`);
-            card.style.setProperty('--glare-opacity', `${0.15 + Math.abs(tiltX) * 0.28}`);
+            card.style.setProperty('--glare-opacity', `${glareOpacity.toFixed(2)}`);
 
             // Отображение слоев в зависимости от режима
             if (currentMode === 'qr') {
@@ -1392,25 +1397,15 @@
             }
 
             // Режим 'auto' или интерактивное вращение:
+            // Истинное стерео-варио: под лучом света происходит чистый дискретный переход без наложения букв на буквы!
             layerQR.style.opacity = '0';
-            let wBlackcard = 0;
-            let wEmblem = 0;
-
-            if (tiltX <= -0.28) {
-                wEmblem = 1;
-                wBlackcard = 0;
-            } else if (tiltX >= 0.28) {
-                wEmblem = 0;
-                wBlackcard = 1;
+            if (tiltX < 0) {
+                layerEmblem.style.opacity = '1';
+                layerBlackcard.style.opacity = '0';
             } else {
-                const norm = (tiltX + 0.28) / 0.56;
-                const smooth = norm * norm * (3 - 2 * norm);
-                wBlackcard = smooth;
-                wEmblem = 1 - smooth;
+                layerEmblem.style.opacity = '0';
+                layerBlackcard.style.opacity = '1';
             }
-
-            layerEmblem.style.opacity = wEmblem.toFixed(3);
-            layerBlackcard.style.opacity = wBlackcard.toFixed(3);
         }
 
         window.updateLenticular = updateLenticular;
@@ -1420,7 +1415,7 @@
             clearTimeout(userActivityTimer);
             userActivityTimer = setTimeout(() => {
                 isUserActive = false;
-            }, 3000);
+            }, 3500);
         }
 
         // Pointer / Mouse (Компьютер)
@@ -1444,7 +1439,7 @@
             isTouching = false;
             userActivityTimer = setTimeout(() => {
                 isUserActive = false;
-            }, 2500);
+            }, 3000);
         }, { passive: true });
 
         stage.addEventListener('touchmove', (e) => {
@@ -1487,11 +1482,13 @@
                 targetTiltX = -0.9;
                 targetTiltY = 0;
             } else if (mode === 'master') {
-                targetTiltX = 0;
+                targetTiltX = 0.9;
                 targetTiltY = 0;
             } else if (mode === 'qr') {
                 targetTiltX = 0;
                 targetTiltY = 0;
+            } else if (mode === 'auto') {
+                isUserActive = false;
             }
             updateModeButtons();
             updateLenticular(targetTiltX, targetTiltY);
@@ -1501,9 +1498,7 @@
             if (currentMode === 'auto') {
                 setMode('master');
             } else {
-                currentMode = 'auto';
-                isUserActive = false;
-                updateModeButtons();
+                setMode('auto');
             }
         }
 
@@ -1516,25 +1511,33 @@
 
         // Клик по карточке для быстрого циклического переворота
         card.addEventListener('click', () => {
-            if (currentMode === 'master') {
+            if (currentMode === 'auto') {
+                if (currentTiltX <= 0) setMode('master');
+                else setMode('emblem');
+            } else if (currentMode === 'master') {
                 setMode('emblem');
             } else if (currentMode === 'emblem') {
                 setMode('qr');
             } else {
-                setMode('master');
+                setMode('auto');
             }
         });
 
-        // Плавный кинематографичный цикл анимации
+        // Величественный кинематографичный цикл анимации:
+        // Пауза ~3.5 сек на Стороне 1 -> плавный поворот со световым лучом -> Пауза ~3.5 сек на Стороне 2
         function animLoop() {
             if (currentMode === 'auto' && !isUserActive) {
-                autoTime += 0.007;
-                const s = Math.sin(autoTime);
-                const shapedX = Math.sign(s) * Math.pow(Math.abs(s), 0.55) * 0.95;
-                const shapedY = Math.cos(autoTime * 0.5) * 0.15;
+                autoTime += 0.008;
+                const rawSin = Math.sin(autoTime);
+                const sign = Math.sign(rawSin);
+                const absSin = Math.abs(rawSin);
+                // Плавное плато для комфортного чтения
+                const plateaud = sign * Math.min(1.0, Math.pow(absSin, 0.4) * 1.12);
+                const shapedX = Math.max(-0.95, Math.min(0.95, plateaud));
+                const shapedY = Math.cos(autoTime * 0.5) * 0.12;
                 
-                currentTiltX += (shapedX - currentTiltX) * 0.05;
-                currentTiltY += (shapedY - currentTiltY) * 0.05;
+                currentTiltX += (shapedX - currentTiltX) * 0.06;
+                currentTiltY += (shapedY - currentTiltY) * 0.06;
             } else {
                 currentTiltX += (targetTiltX - currentTiltX) * 0.12;
                 currentTiltY += (targetTiltY - currentTiltY) * 0.12;
@@ -1582,8 +1585,8 @@ END:VCARD`;
             }, 3500);
         }
 
-        // Initial setup: показываем сторону мастера
-        setMode('master');
+        // Initial setup: включаем Авто 3D по умолчанию
+        setMode('auto');
     </script>
 </body>
 </html>
