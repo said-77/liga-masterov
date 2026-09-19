@@ -1,0 +1,5 @@
+scratch/
+*.zip
+*.log
+.system_generated/
+*.py

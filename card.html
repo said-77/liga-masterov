@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Улугбек Хакимов | Премиальная 3D Стерео-Визитка для Дизайнеров</title>
+    
+    <!-- Meta & Open Graph для безупречного превью в Telegram / WhatsApp -->
+    <meta name="description" content="Интерактивная стерео-визитка мастера Улугбека Хакимова. Премиальный инженерный монтаж сантехники для дизайнеров и архитекторов Ташкента.">
+    <meta name="theme-color" content="#0d0f12">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://liga-opytnykh-masterov-uz.netlify.app/card.html">
+    <meta property="og:title" content="Улугбек Хакимов — VIP Инженерная Сантехника для Дизайнеров">
+    <meta property="og:description" content="💳 Интерактивная стерео-варио визитка («переливашка»). Нажмите, чтобы покрутить карточку и сохранить контакт в 1 клик.">
+    <meta property="og:image" content="https://liga-opytnykh-masterov-uz.netlify.app/media/banner_concept3_blackcard.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://liga-opytnykh-masterov-uz.netlify.app/media/banner_concept3_blackcard.jpg">
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Montserrat:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold-primary: #d4a359;
+            --gold-bright: #ffd175;
+            --gold-glow: rgba(212, 163, 89, 0.4);
+            --bg-dark: #0a0c10;
+            --bg-card: #12151b;
+            --text-main: #f0f3f6;
+            --text-muted: #9aa0a6;
+            --border-subtle: rgba(212, 163, 89, 0.25);
+            --card-radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(212, 163, 89, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(0, 180, 216, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #07090c 0%, #0d1017 100%);
+            perspective: 1200px;
+            padding: 24px 16px 40px;
+        }
+
+        /* Ambient Glow & Particles */
+        .ambient-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 163, 89, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header / Logo */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .badge-elite {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(212, 163, 89, 0.12);
+            border: 1px solid rgba(212, 163, 89, 0.35);
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-bright);
+            margin-bottom: 12px;
+            box-shadow: 0 0 20px rgba(212, 163, 89, 0.2);
+        }
+
+        .badge-elite .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ffaa;
+            box-shadow: 0 0 10px #00ffaa;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #ffffff 30%, #e2c08d 70%, #d4a359 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* 3D Lenticular Card Stage */
+        .card-stage {
+            width: 100%;
+            aspect-ratio: 16 / 9.5;
+            max-width: 540px;
+            position: relative;
+            perspective: 1400px;
+            margin-bottom: 28px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .card-stage:active {
+            cursor: grabbing;
+        }
+
+        .card-3d-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: var(--card-radius);
+            transform-style: preserve-3d;
+            transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+            box-shadow: 
+                0 30px 60px -15px rgba(0, 0, 0, 0.9),
+                0 0 40px rgba(212, 163, 89, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Card Frame Border (Gold Metallic Edge) */
+        .card-frame {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--card-radius);
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(255, 215, 117, 0.8) 0%, rgba(212, 163, 89, 0.3) 40%, rgba(0, 0, 0, 0.6) 60%, rgba(255, 215, 117, 0.7) 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: calc(var(--card-radius) - 2px);
+            overflow: hidden;
+            background-color: #0b0d11;
+        }
+
+        /* The 3 Lenticular Image Layers */
+        .lenticular-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.22s ease-out;
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+        }
+
+        /* Layer 1: Monolith Masterwork */
+        .layer-monolith {
+            background-image: url('media/banner_concept1_monolith.jpg');
+        }
+
+        /* Layer 2: CAD Blueprint & Laser */
+        .layer-blueprint {
+            background-image: url('media/banner_concept2_blueprint.jpg');
+        }
+
+        /* Layer 3: VIP Black Card */
+        .layer-blackcard {
+            background-image: url('media/banner_concept3_blackcard.jpg');
+        }
+
+        /* Soviet Lenticular Micro-Ribs (Ребристый стерео-растр линз) */
+        .lenticular-raster {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.05) 0px,
+                rgba(255, 255, 255, 0.05) 1.5px,
+                rgba(0, 0, 0, 0.35) 1.5px,
+                rgba(0, 0, 0, 0.35) 3.5px
+            );
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.85;
+        }
+
+        /* Holographic Spectral Foil Glare (Радужный голографический перелив) */
+        .holographic-glare {
+            position: absolute;
+            inset: -50%;
+            background: linear-gradient(
+                115deg,
+                transparent 20%,
+                rgba(255, 0, 128, 0.35) 36%,
+                rgba(0, 255, 220, 0.45) 48%,
+                rgba(255, 215, 0, 0.4) 60%,
+                transparent 78%
+            );
+            transform: translateX(var(--glare-x, 0%)) translateY(var(--glare-y, 0%)) rotate(12deg);
+            mix-blend-mode: color-dodge;
+            pointer-events: none;
+            z-index: 6;
+            opacity: var(--glare-opacity, 0.7);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Specular Light Reflection */
+        .specular-light {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 50%), rgba(255, 255, 255, 0.35) 0%, transparent 65%);
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+            z-index: 7;
+        }
+
+        /* Micro Hint On Card */
+        .tilt-hint {
+            position: absolute;
+            bottom: 12px;
+            right: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(212, 163, 89, 0.3);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            color: var(--gold-bright);
+            z-index: 12;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        .tilt-hint svg {
+            animation: tiltIcon 2s ease-in-out infinite;
+        }
+
+        @keyframes tiltIcon {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg); }
+            75% { transform: rotate(15deg); }
+        }
+
+        /* Layer Indicators / Manual Selector */
+        .layer-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: rgba(18, 21, 27, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 6px 10px;
+            border-radius: 40px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .layer-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .layer-btn:hover {
+            color: #fff;
+        }
+
+        .layer-btn.active {
+            background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-primary) 100%);
+            color: #07090c;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 163, 89, 0.4);
+        }
+
+        /* Action Buttons Grid */
+        .action-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-call:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -5px rgba(16, 185, 129, 0.6);
+        }
+
+        .btn-tg {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 25px -5px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-tg:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -5px rgba(14, 165, 233, 0.6);
+        }
+
+        .btn-vcard {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #e5b969 0%, #c48c3b 100%);
+            color: #07090c;
+            padding: 16px 20px;
+            font-size: 14px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px -5px rgba(212, 163, 89, 0.45);
+        }
+
+        .btn-vcard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -5px rgba(212, 163, 89, 0.7);
+        }
+
+        .btn-share {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .btn-share:hover {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: var(--gold-bright);
+            color: var(--gold-bright);
+        }
+
+        .btn-qr {
+            background: rgba(212, 163, 89, 0.15);
+            color: var(--gold-bright);
+            border: 1px solid rgba(212, 163, 89, 0.35);
+        }
+
+        .btn-qr:hover {
+            background: rgba(212, 163, 89, 0.28);
+            border-color: var(--gold-bright);
+        }
+
+        .btn-full-site {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(212, 163, 89, 0.2) 0%, rgba(255, 209, 117, 0.08) 100%);
+            color: #ffffff;
+            border: 1.5px solid rgba(212, 163, 89, 0.55);
+            padding: 16px 22px;
+            font-size: 13.5px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 163, 89, 0.2);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-full-site:hover {
+            background: linear-gradient(135deg, #d4a359 0%, #b88636 100%);
+            color: #07090c;
+            border-color: #ffd175;
+            box-shadow: 0 12px 30px rgba(212, 163, 89, 0.45);
+            transform: translateY(-2px);
+        }
+
+        /* QR Modal */
+        .qr-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 7, 12, 0.85);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .qr-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .qr-dialog {
+            background: #0d1017;
+            border: 1px solid rgba(212, 163, 89, 0.4);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(212, 163, 89, 0.25);
+            border-radius: 22px;
+            padding: 28px 24px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            transform: scale(0.92);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .qr-modal.active .qr-dialog {
+            transform: scale(1);
+        }
+
+        .qr-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #9ca3af;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .qr-close-btn:hover { color: #fff; border-color: var(--gold-bright); }
+        .qr-img-box {
+            width: 200px;
+            height: 200px;
+            margin: 16px auto;
+            border-radius: 16px;
+            border: 2px solid rgba(212, 163, 89, 0.5);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            background: #0b0e14;
+        }
+
+        .qr-img-box img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Master Info Footer Box */
+        .info-card {
+            width: 100%;
+            background: rgba(18, 21, 27, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .info-value.gold {
+            color: var(--gold-bright);
+        }
+
+        /* Success Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #10b981;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 100;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 22px;
+            }
+            .card-stage {
+                aspect-ratio: 16 / 10;
+            }
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn-vcard, .btn-full-site {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="badge-elite">
+                <span class="pulse-dot"></span>
+                <span>Лига Опытных Мастеров • Ташкент</span>
+            </div>
+            <h1 class="title">УЛУГБЕК ХАКИМОВ</h1>
+            <p class="subtitle">Инженерная сантехника для дизайнеров интерьера и архитекторов</p>
+        </header>
+
+        <!-- 3D Lenticular Card -->
+        <div class="card-stage" id="cardStage">
+            <div class="card-3d-wrapper" id="card3d">
+                <div class="card-frame"></div>
+                <div class="card-inner">
+                    <!-- Layer 1: Monolith Copper Masterwork -->
+                    <div class="lenticular-layer layer-monolith" id="layerMonolith"></div>
+                    <!-- Layer 2: CAD Blueprint & Laser -->
+                    <div class="lenticular-layer layer-blueprint" id="layerBlueprint"></div>
+                    <!-- Layer 3: VIP Black Card -->
+                    <div class="lenticular-layer layer-blackcard" id="layerBlackcard"></div>
+                    
+                    <!-- Lenticular Raster (Soviet Lenticular Micro-Ribs) -->
+                    <div class="lenticular-raster"></div>
+                    
+                    <!-- Holographic Foil Glare -->
+                    <div class="holographic-glare" id="cardGlare"></div>
+                    
+                    <!-- Specular Light -->
+                    <div class="specular-light" id="specularLight"></div>
+
+                    <!-- Tilt Hint -->
+                    <div class="tilt-hint">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                            <path d="M7 15h10M7 9h4"></path>
+                        </svg>
+                        <span>Покачивайте экран</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Layer Switcher -->
+        <div class="layer-controls">
+            <button class="layer-btn" id="btnLayer1" onclick="selectLayer(1)">
+                <span>1</span> Узел FAR
+            </button>
+            <button class="layer-btn active" id="btnLayer2" onclick="selectLayer(2)">
+                <span>2</span> Чертеж CAD
+            </button>
+            <button class="layer-btn" id="btnLayer3" onclick="selectLayer(3)">
+                <span>3</span> Black Card
+            </button>
+            <button class="layer-btn" id="btnAutoSway" onclick="toggleAutoSway()" title="Вкл/Выкл покачивание">
+                🔄 Авто
+            </button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-grid">
+            <a href="tel:+998909833828" class="btn-action btn-call">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24 11.72 11.72 0 003.68.59 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.68 1 1 0 01-.24 1.05l-2.23 2.06z"></path>
+                </svg>
+                <span>+998 90 983-38-28</span>
+            </a>
+
+            <a href="https://t.me/HakimovMU" target="_blank" class="btn-action btn-tg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"></path>
+                </svg>
+                <span>Написать в Telegram</span>
+            </a>
+
+            <button onclick="shareCard()" class="btn-action btn-share">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                <span>Поделиться</span>
+            </button>
+
+            <button onclick="toggleQRModal(true)" class="btn-action btn-qr">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <span>QR-код мастера</span>
+            </button>
+
+            <button onclick="downloadVCard()" class="btn-action btn-vcard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>💾 Сохранить контакт в телефон</span>
+            </button>
+
+            <a href="index.html" class="btn-action btn-full-site">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span>💎 ОТКРЫТЬ ПОЛНЫЙ САЙТ И 4K-ПОРТФОЛИО →</span>
+            </a>
+        </div>
+
+        <!-- Master Credentials Block -->
+        <div class="info-card">
+            <div class="info-row">
+                <span class="info-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Специализация:
+                </span>
+                <span class="info-value">Премиум котельные, медь, FAR, Rehau</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Официальная гарантия:
+                </span>
+                <span class="info-value gold">5 лет по договору</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Опыт работы:
+                </span>
+                <span class="info-value">15+ лет (120+ сданных объектов)</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Локация:
+                </span>
+                <span class="info-value">Ташкент и Ташкентская область</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно персонального QR-кода -->
+    <div class="qr-modal" id="qrModal" onclick="if(event.target===this) toggleQRModal(false)">
+        <div class="qr-dialog">
+            <button class="qr-close-btn" onclick="toggleQRModal(false)">✕</button>
+            <div class="badge-elite" style="margin-bottom: 8px;">
+                <span class="pulse-dot"></span>
+                <span>ПЕРСОНАЛЬНЫЙ QR-КОД</span>
+            </div>
+            <h3 style="font-family: 'Cinzel', serif; color: #ffd175; font-size: 18px; margin-bottom: 4px;">УЛУГБЕК ХАКИМОВ</h3>
+            <p style="font-size: 11.5px; color: #9ca3af; margin-bottom: 12px;">Наведите камеру смартфона, чтобы открыть цифровую 3D-визитку</p>
+            
+            <div class="qr-img-box">
+                <img src="media/qr_card.png" alt="QR-код визитки Улугбека Хакимова">
+            </div>
+
+            <button onclick="copyCardUrl()" class="btn-action" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(212,163,89,0.3); color: #ffd175; width: 100%; margin-top: 10px; font-size: 12px;">
+                <span>📋 Скопировать ссылку на визитку</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span id="toastText">Контакт Улугбека успешно сохранен!</span>
+    </div>
+
+    <script>
+        // DOM Elements
+        const stage = document.getElementById('cardStage');
+        const card = document.getElementById('card3d');
+        const layerMonolith = document.getElementById('layerMonolith');
+        const layerBlueprint = document.getElementById('layerBlueprint');
+        const layerBlackcard = document.getElementById('layerBlackcard');
+        const glare = document.getElementById('cardGlare');
+        const toast = document.getElementById('toast');
+
+        function toggleQRModal(show) {
+            const m = document.getElementById('qrModal');
+            if (show) m.classList.add('active');
+            else m.classList.remove('active');
+        }
+
+        function copyCardUrl() {
+            const url = 'https://liga-opytnykh-masterov-uz.netlify.app/card.html';
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('Ссылка на визитку скопирована в буфер!');
+                });
+            } else {
+                showToast('Ссылка: ' + url);
+            }
+        }
+
+        function shareCard() {
+            const shareData = {
+                title: 'Улугбек Хакимов | Премиальная 3D-визитка мастера',
+                text: '💳 Интерактивная визитная карта («переливашка») мастера инженерной сантехники Улугбека Хакимова:',
+                url: 'https://liga-opytnykh-masterov-uz.netlify.app/card.html'
+            };
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => {});
+            } else {
+                copyCardUrl();
+            }
+        }
+
+        // State Variables
+        let currentTiltX = 0; // -1 to 1
+        let currentTiltY = 0; // -1 to 1
+        let autoSway = true;
+        let swayTime = 0;
+        let isTouching = false;
+        let hasGyroscope = false;
+
+        // Lenticular 3-Layer Blend & Parallax (Стерео-варио СССР с параллаксом и микролинзами)
+        function updateLenticular(tiltX, tiltY) {
+            tiltX = Math.max(-1, Math.min(1, tiltX));
+            tiltY = Math.max(-1, Math.min(1, tiltY));
+
+            // 3D Tilt Transform
+            const rotateY = tiltX * 19; 
+            const rotateX = -tiltY * 13; 
+            card.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateZ(0)`;
+
+            // Holographic Spectral Foil Glare (Радужный голографический блик)
+            const glareX = (-tiltX * 90);
+            const glareY = (-tiltY * 90);
+            card.style.setProperty('--glare-x', `${glareX}%`);
+            card.style.setProperty('--glare-y', `${glareY}%`);
+            card.style.setProperty('--glare-opacity', `${0.35 + Math.abs(tiltX) * 0.55}`);
+
+            // Specular Light Spot
+            const lightX = 50 + tiltX * 42;
+            const lightY = 50 + tiltY * 42;
+            card.style.setProperty('--light-x', `${lightX}%`);
+            card.style.setProperty('--light-y', `${lightY}%`);
+
+            // Parallax Shift for Physical 3D Depth
+            layerMonolith.style.transform = `translateX(${-tiltX * 8}px) scale(1.03)`;
+            layerBlueprint.style.transform = `translateX(${(-tiltX) * 3}px) scale(1.02)`;
+            layerBlackcard.style.transform = `translateX(${tiltX * 7}px) scale(1.04)`;
+
+            // Soviet Lenticular 3-Layer Threshold Blend
+            let wMonolith = 0;
+            let wBlueprint = 0;
+            let wBlackcard = 0;
+
+            if (tiltX < -0.18) {
+                // Dominates Monolith (Узел FAR / Медь)
+                const factor = Math.min(1, (-tiltX - 0.18) / 0.38);
+                wMonolith = 0.55 + factor * 0.45;
+                wBlueprint = 1 - wMonolith;
+                wBlackcard = 0;
+            } else if (tiltX > 0.18) {
+                // Dominates Black Card (Титановая карта мастера)
+                const factor = Math.min(1, (tiltX - 0.18) / 0.38);
+                wBlackcard = 0.55 + factor * 0.45;
+                wBlueprint = 1 - wBlackcard;
+                wMonolith = 0;
+            } else {
+                // Center: Blueprint (Инженерный CAD-чертеж)
+                wBlueprint = 1;
+                wMonolith = 0;
+                wBlackcard = 0;
+            }
+
+            layerMonolith.style.opacity = wMonolith.toFixed(2);
+            layerBlueprint.style.opacity = wBlueprint.toFixed(2);
+            layerBlackcard.style.opacity = wBlackcard.toFixed(2);
+
+            updateActiveButton(tiltX);
+        }
+
+        window.updateLenticular = updateLenticular;
+
+        function updateActiveButton(tiltX) {
+            document.querySelectorAll('.layer-btn').forEach(b => {
+                if (b.id !== 'btnAutoSway') b.classList.remove('active');
+            });
+            if (tiltX < -0.2) {
+                document.getElementById('btnLayer1').classList.add('active');
+            } else if (tiltX > 0.2) {
+                document.getElementById('btnLayer3').classList.add('active');
+            } else {
+                document.getElementById('btnLayer2').classList.add('active');
+            }
+        }
+
+        // Manual Selection
+        function selectLayer(num) {
+            autoSway = false;
+            updateAutoSwayButton();
+            if (num === 1) {
+                targetTiltX = -0.7;
+            } else if (num === 2) {
+                targetTiltX = 0;
+            } else if (num === 3) {
+                targetTiltX = 0.7;
+            }
+            currentTiltX = targetTiltX;
+            updateLenticular(currentTiltX, 0);
+        }
+
+        function toggleAutoSway() {
+            autoSway = !autoSway;
+            updateAutoSwayButton();
+        }
+
+        function updateAutoSwayButton() {
+            const btn = document.getElementById('btnAutoSway');
+            if (autoSway) {
+                btn.style.color = '#ffd175';
+                btn.style.borderColor = '#ffd175';
+            } else {
+                btn.style.color = '#9aa0a6';
+                btn.style.borderColor = 'transparent';
+            }
+        }
+
+        // Pointer / Mouse Movement
+        stage.addEventListener('pointermove', (e) => {
+            autoSway = false;
+            updateAutoSwayButton();
+            const rect = stage.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            currentTiltX = ((x / rect.width) - 0.5) * 2;
+            currentTiltY = ((y / rect.height) - 0.5) * 2;
+            updateLenticular(currentTiltX, currentTiltY);
+        });
+
+        stage.addEventListener('pointerleave', () => {
+            if (!isTouching) {
+                // Resume gentle sway after 2s
+                setTimeout(() => {
+                    if (!isTouching && !hasGyroscope) autoSway = true;
+                    updateAutoSwayButton();
+                }, 2000);
+            }
+        });
+
+        // Touch Interaction
+        stage.addEventListener('touchstart', () => {
+            isTouching = true;
+            autoSway = false;
+            updateAutoSwayButton();
+        }, { passive: true });
+
+        stage.addEventListener('touchend', () => {
+            isTouching = false;
+            setTimeout(() => {
+                if (!hasGyroscope) autoSway = true;
+                updateAutoSwayButton();
+            }, 3000);
+        }, { passive: true });
+
+        stage.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                const rect = stage.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                currentTiltX = ((x / rect.width) - 0.5) * 2;
+                currentTiltY = ((y / rect.height) - 0.5) * 2;
+                updateLenticular(currentTiltX, currentTiltY);
+            }
+        }, { passive: true });
+
+        // Mobile Device Orientation (Gyroscope / Стерео-переливашка от наклона телефона!)
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (e) => {
+                if (e.gamma !== null && e.beta !== null) {
+                    hasGyroscope = true;
+                    autoSway = false;
+                    // Gamma is left/right tilt [-90, 90]
+                    // Beta is front/back tilt [-180, 180]
+                    const gamma = Math.max(-35, Math.min(35, e.gamma));
+                    const beta = Math.max(10, Math.min(60, e.beta)) - 35; // typical handheld angle ~35deg
+                    
+                    currentTiltX = gamma / 30; // normalized ~ -1 to 1
+                    currentTiltY = beta / 25;
+                    updateLenticular(currentTiltX, currentTiltY);
+                }
+            });
+        }
+
+        // Animation Loop (Continuous Lenticular Wave)
+        function animLoop() {
+            if (autoSway) {
+                swayTime += 0.025;
+                // Sinusoidal gentle sway
+                currentTiltX = Math.sin(swayTime) * 0.85;
+                currentTiltY = Math.cos(swayTime * 0.7) * 0.25;
+                updateLenticular(currentTiltX, currentTiltY);
+            }
+            requestAnimationFrame(animLoop);
+        }
+        requestAnimationFrame(animLoop);
+
+        // vCard (.vcf) Generator for 1-Click Save to Phonebook
+        function downloadVCard() {
+            const vCardData = 
+`BEGIN:VCARD
+VERSION:3.0
+N:Хакимов;Улугбек;;Мастер;
+FN:Улугбек Хакимов (Премиум Сантехника)
+ORG:Лига Опытных Мастеров
+TITLE:Инженерная сантехника для дизайнеров интерьера
+TEL;TYPE=CELL,VOICE,PREF:+998909833828
+EMAIL;TYPE=WORK:contact@liga-masterov.uz
+URL;TYPE=WORK:https://liga-opytnykh-masterov-uz.netlify.app/
+ADR;TYPE=WORK:;;г. Ташкент;Ташкент;;Узбекистан
+NOTE:Элитный монтаж котельных, узлов ввода FAR, Rehau, систем Neptun/Gidrolock и скрытой сантехники. Партнерская программа для дизайнеров. Гарантия 2 года по договору. Telegram: @HakimovMU
+END:VCARD`;
+
+            const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Улугбек_Хакимов_Премиум_Сантехника.vcf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('Контакт мастера Улугбека добавлен в загрузки!');
+        }
+
+        function showToast(msg) {
+            document.getElementById('toastText').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        // Initial setup
+        updateLenticular(0, 0);
+    </script>
+</body>
+</html>

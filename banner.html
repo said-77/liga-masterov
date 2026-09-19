@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Лига Опытных Мастеров • Ташкент</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Open Graph Превью для Telegram и WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Лига Опытных Мастеров • Ташкент">
+    <meta property="og:description" content="Премиальный монтаж инженерной сантехники. Нажмите для перехода на сайт мастера.">
+    <meta property="og:image" content="media/banner_slide_gold_emblem.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <style>
+        :root {
+            --gold-bright: #ffd175;
+            --gold-primary: #d4a359;
+            --gold-deep: #99732a;
+            --dark-bg: #05070a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 16px;
+        }
+
+        /* Кликабельный баннер-ссылка */
+        .banner-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 1200 / 630;
+            position: relative;
+            cursor: pointer;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 30px 90px -15px rgba(0, 0, 0, 0.98),
+                0 0 50px rgba(212, 163, 89, 0.20),
+                inset 0 0 0 1.5px rgba(255, 215, 120, 0.45);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+            perspective: 1400px;
+        }
+
+        .banner-link:hover {
+            transform: scale(1.01);
+            box-shadow: 
+                0 40px 100px -10px rgba(0, 0, 0, 0.99),
+                0 0 70px rgba(212, 163, 89, 0.35),
+                inset 0 0 0 2px rgba(255, 215, 120, 0.75);
+        }
+
+        /* 3D Сцена */
+        .banner-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            background-color: #07090e;
+        }
+
+        /* Ровно 2 Слоя (Трубы FAR <-> Золотой Баннер Лига Мастеров) */
+        .banner-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.35s ease-out;
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+        }
+
+        .layer-1 { 
+            background-image: url('media/banner_slide1_copper.jpg'); 
+        }
+        .layer-2 { 
+            background-image: url('media/banner_slide_gold_emblem.jpg'); 
+        }
+
+        /* Деликатный оптический микро-растр для эффекта линзовой переливашки */
+        .lenticular-raster {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.03) 0px,
+                rgba(255, 255, 255, 0.03) 1.5px,
+                rgba(0, 0, 0, 0.16) 1.5px,
+                rgba(0, 0, 0, 0.16) 3px
+            );
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.6;
+        }
+
+        /* Благородный металлический золотистый блик (без радуги) */
+        .metallic-gleam {
+            position: absolute;
+            inset: -60%;
+            background: linear-gradient(
+                115deg,
+                transparent 35%,
+                rgba(255, 235, 180, 0.08) 45%,
+                rgba(255, 255, 255, 0.30) 50%,
+                rgba(212, 163, 89, 0.18) 55%,
+                transparent 65%
+            );
+            transform: translateX(var(--glare-x, 0%)) translateY(var(--glare-y, 0%)) rotate(12deg);
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 6;
+            opacity: var(--glare-opacity, 0.45);
+        }
+
+        /* Мягкая виньетка по периметру */
+        .banner-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.0) 40%, rgba(5, 7, 10, 0.65) 100%);
+            pointer-events: none;
+            z-index: 7;
+        }
+
+        /* Вверху слева: Единственный статус — Лига опытных мастеров Ташкент */
+        .banner-top-bar {
+            position: absolute;
+            top: 20px;
+            left: 22px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .banner-badge {
+            background: rgba(8, 12, 18, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 215, 120, 0.45);
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            color: var(--gold-bright);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .pulse-live {
+            width: 7px;
+            height: 7px;
+            background-color: #00f5a0;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00f5a0;
+            animation: pulse-dot 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 12px #00f5a0; }
+            100% { transform: scale(0.9); opacity: 0.8; }
+        }
+
+        /* Внизу справа: Изящная, компактная, элитная кнопка */
+        .banner-cta-wrap {
+            position: absolute;
+            bottom: 20px;
+            right: 22px;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .cta-button {
+            background: rgba(10, 14, 22, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: var(--gold-bright);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 215, 120, 0.6);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 163, 89, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .banner-link:hover .cta-button {
+            background: linear-gradient(135deg, rgba(255, 215, 120, 0.95) 0%, rgba(212, 163, 89, 0.95) 100%);
+            color: #080b10;
+            border-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(212, 163, 89, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .cta-button svg {
+            transition: transform 0.25s ease;
+        }
+
+        .banner-link:hover .cta-button svg {
+            transform: translateX(3px);
+        }
+
+        /* Адаптивность под смартфоны */
+        @media (max-width: 768px) {
+            .banner-top-bar { top: 14px; left: 14px; }
+            .banner-badge { font-size: 9.5px; padding: 6px 14px; }
+            .banner-cta-wrap { bottom: 14px; right: 14px; }
+            .cta-button { font-size: 10px; padding: 8px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Кликабельный Рекламный Баннер -->
+    <a href="index.html" class="banner-link" id="bannerLink" title="Открыть официальный сайт">
+        <div class="banner-inner" id="bannerInner">
+            <!-- Кадр 1: Медные трубы FAR -->
+            <div class="banner-layer layer-1" id="bLayer1"></div>
+
+            <!-- Кадр 2: Золотой герб Лига Мастеров Ташкент -->
+            <div class="banner-layer layer-2" id="bLayer2"></div>
+
+            <!-- Оптический микро-растр -->
+            <div class="lenticular-raster"></div>
+
+            <!-- Золотистый металлический блик -->
+            <div class="metallic-gleam" id="bGlare"></div>
+
+            <!-- Затемняющая виньетка -->
+            <div class="banner-vignette"></div>
+
+            <!-- Верхний бейдж: только Лига опытных мастеров Ташкент -->
+            <div class="banner-top-bar">
+                <div class="banner-badge">
+                    <span class="pulse-live"></span>
+                    <span>ЛИГА ОПЫТНЫХ МАСТЕРОВ • ТАШКЕНТ</span>
+                </div>
+            </div>
+
+            <!-- Изящная премиальная кнопка внизу справа -->
+            <div class="banner-cta-wrap">
+                <div class="cta-button">
+                    <span>Открыть сайт</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </a>
+
+    <script>
+        const link = document.getElementById('bannerLink');
+        const inner = document.getElementById('bannerInner');
+        const l1 = document.getElementById('bLayer1');
+        const l2 = document.getElementById('bLayer2');
+
+        let tiltX = 0; // -1 (Слева: Трубы) до +1 (Справа: Золотой герб)
+        let tiltY = 0;
+        let isAuto = true;
+        let autoTime = 0;
+        let isTouching = false;
+
+        // Расчет 2-кадрового оптического переливания
+        function updateBannerTilt(x, y) {
+            x = Math.max(-1, Math.min(1, x));
+            y = Math.max(-1, Math.min(1, y));
+
+            // Плавный 3D поворот сцены
+            const rotY = x * 10;
+            const rotX = -y * 6;
+            inner.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg) translateZ(0)`;
+
+            // Скольжение золотого блика
+            inner.style.setProperty('--glare-x', `${-x * 80}%`);
+            inner.style.setProperty('--glare-y', `${-y * 80}%`);
+            inner.style.setProperty('--glare-opacity', `${0.35 + Math.abs(x) * 0.4}`);
+
+            // Параллакс глубинного смещения слоев
+            if (l1) l1.style.transform = `translateX(${-x * 6}px) scale(1.02)`;
+            if (l2) l2.style.transform = `translateX(${x * 6}px) scale(1.02)`;
+
+            // Честное 2-кадровое переключение (как в советской стерео-открытке):
+            // x < -0.10: Кадр 1 (Трубы FAR)
+            // x > +0.10: Кадр 2 (Золотая эмблема Лига Мастеров)
+            // Вокруг нуля (-0.10 до +0.10): плавный благородный переход
+            let o1 = 0, o2 = 0;
+
+            if (x <= -0.15) {
+                o1 = 1;
+                o2 = 0;
+            } else if (x >= 0.15) {
+                o1 = 0;
+                o2 = 1;
+            } else {
+                // Переходная зона шириной 0.3 (-0.15 .. +0.15)
+                const factor = (x + 0.15) / 0.30; // 0..1
+                o2 = factor;
+                o1 = 1 - factor;
+            }
+
+            if (l1) l1.style.opacity = o1.toFixed(3);
+            if (l2) l2.style.opacity = o2.toFixed(3);
+        }
+
+        // Авто-переливание: МЕДЛЕННОЕ, ПЛАВНОЕ, ВЕЛИЧЕСТВЕННОЕ (цикл ~8 секунд)
+        // Задерживается на трубах, затем плавно перетекает в золотой герб, задерживается и возвращается
+        function animateLoop() {
+            if (isAuto) {
+                autoTime += 0.007; // В 3 раза медленнее, чем раньше!
+                // Функция с плавной паузой на экстремумах
+                const rawSin = Math.sin(autoTime);
+                // Делаем мягкое насыщение, чтобы на краях картинка фиксировалась
+                tiltX = Math.sign(rawSin) * Math.pow(Math.abs(rawSin), 0.7) * 0.9;
+                tiltY = Math.cos(autoTime * 0.6) * 0.18;
+                updateBannerTilt(tiltX, tiltY);
+            }
+            requestAnimationFrame(animateLoop);
+        }
+        requestAnimationFrame(animateLoop);
+
+        // Движение мыши на компьютере: мгновенный интерактивный отклик
+        link.addEventListener('pointermove', (e) => {
+            isAuto = false;
+            const rect = link.getBoundingClientRect();
+            tiltX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+            tiltY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+            updateBannerTilt(tiltX, tiltY);
+        });
+
+        link.addEventListener('pointerleave', () => {
+            if (!isTouching) {
+                setTimeout(() => {
+                    if (!isTouching) isAuto = true;
+                }, 2200);
+            }
+        });
+
+        // Сенсорное управление на смартфонах
+        link.addEventListener('touchstart', () => {
+            isTouching = true;
+            isAuto = false;
+        }, { passive: true });
+
+        link.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                const t = e.touches[0];
+                const rect = link.getBoundingClientRect();
+                tiltX = ((t.clientX - rect.left) / rect.width - 0.5) * 2;
+                tiltY = ((t.clientY - rect.top) / rect.height - 0.5) * 2;
+                updateBannerTilt(tiltX, tiltY);
+            }
+        }, { passive: true });
+
+        link.addEventListener('touchend', () => {
+            isTouching = false;
+            setTimeout(() => {
+                isAuto = true;
+            }, 3000);
+        }, { passive: true });
+
+        // Гироскоп на смартфонах при покачивании в руке
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (e) => {
+                if (e.gamma !== null && !isTouching) {
+                    isAuto = false;
+                    const g = Math.max(-25, Math.min(25, e.gamma));
+                    const b = Math.max(-25, Math.min(25, e.beta - 40));
+                    tiltX = g / 25;
+                    tiltY = b / 25;
+                    updateBannerTilt(tiltX, tiltY);
+                }
+            });
+        }
+
+        // Интеллектуальный fallback путей
+        [
+            { el: l1, file: 'banner_slide1_copper.jpg' },
+            { el: l2, file: 'banner_slide_gold_emblem.jpg' }
+        ].forEach(item => {
+            const testImg = new Image();
+            testImg.onerror = () => {
+                item.el.style.backgroundImage = `url('${item.file}')`;
+            };
+            testImg.src = `media/${item.file}`;
+        });
+    </script>
+</body>
+</html>
