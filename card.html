@@ -188,7 +188,7 @@
             background-color: #0b0d11;
         }
 
-        /* The 2 Elite Lenticular Layers */
+        /* The 2 Elite Lenticular Layers - Кристальная четкость без мути */
         .lenticular-layer {
             position: absolute;
             inset: 0;
@@ -197,9 +197,11 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 0.28s ease-out;
+            transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
             will-change: opacity, transform;
             backface-visibility: hidden;
+            image-rendering: -webkit-optimize-contrast;
+            transform: translateZ(0);
         }
 
         /* Layer 1: Gold Luxury Emblem */
@@ -212,51 +214,34 @@
             background-image: url('media/banner_concept3_blackcard.jpg');
         }
 
-        /* Soviet Lenticular Micro-Ribs (Ребристый стерео-растр линз) */
+        /* Soviet Lenticular Micro-Ribs (отключен, чтобы убрать муть и полосы) */
         .lenticular-raster {
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.04) 0px,
-                rgba(255, 255, 255, 0.04) 1.5px,
-                rgba(0, 0, 0, 0.25) 1.5px,
-                rgba(0, 0, 0, 0.25) 3.5px
-            );
-            mix-blend-mode: overlay;
-            pointer-events: none;
-            z-index: 5;
-            opacity: 0.75;
+            display: none !important;
         }
 
-        /* Noble Champagne-Gold Glare (Благородный золотой отблеск без радуги) */
+        /* Noble Champagne-Gold Glare (Деликатный золотой отблеск без мути) */
         .metallic-glare {
             position: absolute;
             inset: -50%;
             background: linear-gradient(
                 115deg,
-                transparent 30%,
-                rgba(255, 235, 180, 0.12) 42%,
-                rgba(255, 255, 255, 0.38) 50%,
-                rgba(212, 163, 89, 0.22) 58%,
-                transparent 70%
+                transparent 35%,
+                rgba(255, 235, 180, 0.06) 45%,
+                rgba(255, 255, 255, 0.22) 50%,
+                rgba(212, 163, 89, 0.12) 55%,
+                transparent 65%
             );
             transform: translateX(var(--glare-x, 0%)) translateY(var(--glare-y, 0%)) rotate(12deg);
             mix-blend-mode: screen;
             pointer-events: none;
             z-index: 6;
-            opacity: var(--glare-opacity, 0.55);
+            opacity: var(--glare-opacity, 0.25);
             transition: opacity 0.3s ease;
         }
 
-        /* Specular Light Reflection */
+        /* Specular Light Reflection (отключен, чтобы не было белого тумана) */
         .specular-light {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 50%), rgba(255, 255, 255, 0.35) 0%, transparent 65%);
-            mix-blend-mode: soft-light;
-            pointer-events: none;
-            z-index: 7;
+            display: none !important;
         }
 
         /* Micro Hint On Card */
@@ -291,45 +276,7 @@
             75% { transform: rotate(15deg); }
         }
 
-        /* Layer Indicators / Manual Selector */
-        .layer-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            background: rgba(18, 21, 27, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 6px 10px;
-            border-radius: 40px;
-            border: 1px solid var(--border-subtle);
-        }
 
-        .layer-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .layer-btn:hover {
-            color: #fff;
-        }
-
-        .layer-btn.active {
-            background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-primary) 100%);
-            color: #07090c;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(212, 163, 89, 0.4);
-        }
 
         /* Action Buttons Grid */
         .action-grid {
@@ -642,18 +589,7 @@
             </div>
         </div>
 
-        <!-- Manual Layer Switcher (2 Элитные стороны) -->
-        <div class="layer-controls">
-            <button class="layer-btn active" id="btnLayer1" onclick="selectLayer(1)">
-                <span>1</span> 👑 Золотой герб
-            </button>
-            <button class="layer-btn" id="btnLayer2" onclick="selectLayer(2)">
-                <span>2</span> 💳 Black Card
-            </button>
-            <button class="layer-btn" id="btnAutoSway" onclick="toggleAutoSway()" title="Вкл/Выкл покачивание">
-                🔄 Авто
-            </button>
-        </div>
+
 
         <!-- Action Buttons -->
         <div class="action-grid">
@@ -798,181 +734,158 @@
         }
 
         // State Variables
-        let currentTiltX = 0; // -1 to 1
+        let currentTiltX = 0; // -1 to 1 (left to right)
         let currentTiltY = 0; // -1 to 1
-        let autoSway = true;
-        let swayTime = 0;
+        let targetTiltX = 0;
+        let targetTiltY = 0;
+        let isUserActive = false;
+        let userActivityTimer = null;
+        let autoTime = 0;
         let isTouching = false;
-        let hasGyroscope = false;
+        let baseGamma = null;
 
-        // Чистое 2-кадровое оптическое переливание БЕЗ МУТИ
+        // Чистое 2-кадровое оптическое переливание БЕЗ МУТИ И МЕЛЬКАНИЯ
         function updateLenticular(tiltX, tiltY) {
             tiltX = Math.max(-1, Math.min(1, tiltX));
             tiltY = Math.max(-1, Math.min(1, tiltY));
 
             // 3D Tilt Transform
-            const rotateY = tiltX * 16; 
-            const rotateX = -tiltY * 10; 
+            const rotateY = tiltX * 14; 
+            const rotateX = -tiltY * 8; 
             card.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateZ(0)`;
 
-            // Благородный золотистый отблеск
+            // Благородный деликатный золотистый отблеск
             const glareX = (-tiltX * 85);
             const glareY = (-tiltY * 85);
             card.style.setProperty('--glare-x', `${glareX}%`);
             card.style.setProperty('--glare-y', `${glareY}%`);
-            card.style.setProperty('--glare-opacity', `${0.35 + Math.abs(tiltX) * 0.45}`);
-
-            // Световой блик
-            const lightX = 50 + tiltX * 40;
-            const lightY = 50 + tiltY * 40;
-            card.style.setProperty('--light-x', `${lightX}%`);
-            card.style.setProperty('--light-y', `${lightY}%`);
+            card.style.setProperty('--glare-opacity', `${0.12 + Math.abs(tiltX) * 0.25}`);
 
             // Параллакс
-            if (layerEmblem) layerEmblem.style.transform = `translateX(${-tiltX * 6}px) scale(1.02)`;
-            if (layerBlackcard) layerBlackcard.style.transform = `translateX(${tiltX * 6}px) scale(1.02)`;
+            if (layerEmblem) layerEmblem.style.transform = `translateX(${-tiltX * 5}px) scale(1.02)`;
+            if (layerBlackcard) layerBlackcard.style.transform = `translateX(${tiltX * 5}px) scale(1.02)`;
 
-            // Чистое переключение ровно 2-х сторон
-            let wEmblem = 0;
+            // Симметричное переключение 2-х сторон:
+            // Наклон влево (tiltX < -0.30): 100% Золотой герб (Side 1)
+            // Наклон вправо (tiltX > +0.30): 100% Black Card (Side 2)
+            // В центре (-0.30 .. +0.30): мягкий благородный переход
             let wBlackcard = 0;
+            let wEmblem = 0;
 
-            if (tiltX <= -0.15) {
+            if (tiltX <= -0.30) {
                 wEmblem = 1;
                 wBlackcard = 0;
-            } else if (tiltX >= 0.15) {
+            } else if (tiltX >= 0.30) {
                 wEmblem = 0;
                 wBlackcard = 1;
             } else {
-                const factor = (tiltX + 0.15) / 0.30;
-                wBlackcard = factor;
-                wEmblem = 1 - factor;
+                const norm = (tiltX + 0.30) / 0.60;
+                // Плавная кривая smoothstep (никакого мелькания)
+                const smooth = norm * norm * (3 - 2 * norm);
+                wBlackcard = smooth;
+                wEmblem = 1 - smooth;
             }
 
             if (layerEmblem) layerEmblem.style.opacity = wEmblem.toFixed(3);
             if (layerBlackcard) layerBlackcard.style.opacity = wBlackcard.toFixed(3);
-
-            updateActiveButton(tiltX);
         }
 
         window.updateLenticular = updateLenticular;
 
-        function updateActiveButton(tiltX) {
-            document.querySelectorAll('.layer-btn').forEach(b => {
-                if (b.id !== 'btnAutoSway') b.classList.remove('active');
-            });
-            if (tiltX <= 0) {
-                const b1 = document.getElementById('btnLayer1');
-                if (b1) b1.classList.add('active');
-            } else {
-                const b2 = document.getElementById('btnLayer2');
-                if (b2) b2.classList.add('active');
-            }
+        function markUserActive() {
+            isUserActive = true;
+            clearTimeout(userActivityTimer);
+            userActivityTimer = setTimeout(() => {
+                isUserActive = false;
+            }, 3000);
         }
 
-        // Manual Selection
-        function selectLayer(num) {
-            autoSway = false;
-            updateAutoSwayButton();
-            if (num === 1) {
-                currentTiltX = -0.7;
-            } else if (num === 2) {
-                currentTiltX = 0.7;
-            }
-            updateLenticular(currentTiltX, 0);
-        }
-
-        function toggleAutoSway() {
-            autoSway = !autoSway;
-            updateAutoSwayButton();
-        }
-
-        function updateAutoSwayButton() {
-            const btn = document.getElementById('btnAutoSway');
-            if (autoSway) {
-                btn.style.color = '#ffd175';
-                btn.style.borderColor = '#ffd175';
-            } else {
-                btn.style.color = '#9aa0a6';
-                btn.style.borderColor = 'transparent';
-            }
-        }
-
-        // Pointer / Mouse Movement
+        // Pointer / Mouse Movement (Компьютер)
         stage.addEventListener('pointermove', (e) => {
-            autoSway = false;
-            updateAutoSwayButton();
+            markUserActive();
             const rect = stage.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            currentTiltX = ((x / rect.width) - 0.5) * 2;
-            currentTiltY = ((y / rect.height) - 0.5) * 2;
-            updateLenticular(currentTiltX, currentTiltY);
+            targetTiltX = ((x / rect.width) - 0.5) * 2;
+            targetTiltY = ((y / rect.height) - 0.5) * 2;
         });
 
         stage.addEventListener('pointerleave', () => {
             if (!isTouching) {
-                // Resume gentle sway after 2s
                 setTimeout(() => {
-                    if (!isTouching && !hasGyroscope) autoSway = true;
-                    updateAutoSwayButton();
-                }, 2000);
+                    if (!isTouching) isUserActive = false;
+                }, 1500);
             }
         });
 
-        // Touch Interaction
+        // Touch Interaction (Смартфон)
         stage.addEventListener('touchstart', () => {
             isTouching = true;
-            autoSway = false;
-            updateAutoSwayButton();
+            markUserActive();
         }, { passive: true });
 
         stage.addEventListener('touchend', () => {
             isTouching = false;
-            setTimeout(() => {
-                if (!hasGyroscope) autoSway = true;
-                updateAutoSwayButton();
-            }, 3000);
+            userActivityTimer = setTimeout(() => {
+                isUserActive = false;
+            }, 2500);
         }, { passive: true });
 
         stage.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
+                markUserActive();
                 const touch = e.touches[0];
                 const rect = stage.getBoundingClientRect();
                 const x = touch.clientX - rect.left;
                 const y = touch.clientY - rect.top;
-                currentTiltX = ((x / rect.width) - 0.5) * 2;
-                currentTiltY = ((y / rect.height) - 0.5) * 2;
-                updateLenticular(currentTiltX, currentTiltY);
+                targetTiltX = ((x / rect.width) - 0.5) * 2;
+                targetTiltY = ((y / rect.height) - 0.5) * 2;
             }
         }, { passive: true });
 
-        // Mobile Device Orientation (Gyroscope / Стерео-переливашка от наклона телефона!)
+        // Гироскоп на смартфоне (симметричный наклон влево и вправо)
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', (e) => {
-                if (e.gamma !== null && e.beta !== null) {
-                    hasGyroscope = true;
-                    autoSway = false;
-                    // Gamma is left/right tilt [-90, 90]
-                    // Beta is front/back tilt [-180, 180]
-                    const gamma = Math.max(-35, Math.min(35, e.gamma));
-                    const beta = Math.max(10, Math.min(60, e.beta)) - 35; // typical handheld angle ~35deg
-                    
-                    currentTiltX = gamma / 30; // normalized ~ -1 to 1
-                    currentTiltY = beta / 25;
-                    updateLenticular(currentTiltX, currentTiltY);
+                if (e.gamma !== null && !isTouching) {
+                    // Адаптивная калибровка центра под любой хват смартфона
+                    if (baseGamma === null) {
+                        baseGamma = e.gamma;
+                    } else {
+                        baseGamma = baseGamma * 0.992 + e.gamma * 0.008;
+                    }
+
+                    const deltaG = e.gamma - baseGamma;
+                    if (Math.abs(deltaG) > 2) {
+                        markUserActive();
+                        // Наклон влево (deltaG < 0) -> targetTiltX < 0 (Золотой герб)
+                        // Наклон вправо (deltaG > 0) -> targetTiltX > 0 (Black Card)
+                        targetTiltX = Math.max(-1, Math.min(1, deltaG / 14));
+                        targetTiltY = Math.max(-1, Math.min(1, (e.beta - 35) / 16));
+                    }
                 }
             });
         }
 
-        // Animation Loop (Continuous Lenticular Wave)
+        // Плавный кинематографичный цикл анимации:
+        // Медленный, без мелькания: ~4 сек держит 1-ю сторону, мягкий переход 1.5 сек, ~4 сек держит 2-ю сторону
         function animLoop() {
-            if (autoSway) {
-                swayTime += 0.025;
-                // Sinusoidal gentle sway
-                currentTiltX = Math.sin(swayTime) * 0.85;
-                currentTiltY = Math.cos(swayTime * 0.7) * 0.25;
-                updateLenticular(currentTiltX, currentTiltY);
+            if (!isUserActive) {
+                autoTime += 0.007; // Величественный медленный темп
+                const s = Math.sin(autoTime);
+                // Мягкое плато на вершинах синусоиды, чтобы карточка замирала для комфортного чтения
+                const shapedX = Math.sign(s) * Math.pow(Math.abs(s), 0.55) * 0.95;
+                const shapedY = Math.cos(autoTime * 0.5) * 0.15;
+                
+                // Плавное следование к авто-позиции
+                currentTiltX += (shapedX - currentTiltX) * 0.05;
+                currentTiltY += (shapedY - currentTiltY) * 0.05;
+            } else {
+                // Плавное следование к движениям пальца/мыши/гироскопа (интуитивная инерция)
+                currentTiltX += (targetTiltX - currentTiltX) * 0.12;
+                currentTiltY += (targetTiltY - currentTiltY) * 0.12;
             }
+
+            updateLenticular(currentTiltX, currentTiltY);
             requestAnimationFrame(animLoop);
         }
         requestAnimationFrame(animLoop);
