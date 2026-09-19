@@ -188,7 +188,7 @@
             background-color: #0b0d11;
         }
 
-        /* The 3 Lenticular Image Layers */
+        /* The 2 Elite Lenticular Layers */
         .lenticular-layer {
             position: absolute;
             inset: 0;
@@ -197,22 +197,17 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 0.22s ease-out;
+            transition: opacity 0.28s ease-out;
             will-change: opacity, transform;
             backface-visibility: hidden;
         }
 
-        /* Layer 1: Monolith Masterwork */
-        .layer-monolith {
-            background-image: url('media/banner_concept1_monolith.jpg');
+        /* Layer 1: Gold Luxury Emblem */
+        .layer-emblem {
+            background-image: url('media/banner_slide_gold_emblem.jpg');
         }
 
-        /* Layer 2: CAD Blueprint & Laser */
-        .layer-blueprint {
-            background-image: url('media/banner_concept2_blueprint.jpg');
-        }
-
-        /* Layer 3: VIP Black Card */
+        /* Layer 2: VIP Black Card on Marble */
         .layer-blackcard {
             background-image: url('media/banner_concept3_blackcard.jpg');
         }
@@ -223,34 +218,34 @@
             inset: 0;
             background: repeating-linear-gradient(
                 90deg,
-                rgba(255, 255, 255, 0.05) 0px,
-                rgba(255, 255, 255, 0.05) 1.5px,
-                rgba(0, 0, 0, 0.35) 1.5px,
-                rgba(0, 0, 0, 0.35) 3.5px
+                rgba(255, 255, 255, 0.04) 0px,
+                rgba(255, 255, 255, 0.04) 1.5px,
+                rgba(0, 0, 0, 0.25) 1.5px,
+                rgba(0, 0, 0, 0.25) 3.5px
             );
             mix-blend-mode: overlay;
             pointer-events: none;
             z-index: 5;
-            opacity: 0.85;
+            opacity: 0.75;
         }
 
-        /* Holographic Spectral Foil Glare (Радужный голографический перелив) */
-        .holographic-glare {
+        /* Noble Champagne-Gold Glare (Благородный золотой отблеск без радуги) */
+        .metallic-glare {
             position: absolute;
             inset: -50%;
             background: linear-gradient(
                 115deg,
-                transparent 20%,
-                rgba(255, 0, 128, 0.35) 36%,
-                rgba(0, 255, 220, 0.45) 48%,
-                rgba(255, 215, 0, 0.4) 60%,
-                transparent 78%
+                transparent 30%,
+                rgba(255, 235, 180, 0.12) 42%,
+                rgba(255, 255, 255, 0.38) 50%,
+                rgba(212, 163, 89, 0.22) 58%,
+                transparent 70%
             );
             transform: translateX(var(--glare-x, 0%)) translateY(var(--glare-y, 0%)) rotate(12deg);
-            mix-blend-mode: color-dodge;
+            mix-blend-mode: screen;
             pointer-events: none;
             z-index: 6;
-            opacity: var(--glare-opacity, 0.7);
+            opacity: var(--glare-opacity, 0.55);
             transition: opacity 0.3s ease;
         }
 
@@ -621,18 +616,16 @@
             <div class="card-3d-wrapper" id="card3d">
                 <div class="card-frame"></div>
                 <div class="card-inner">
-                    <!-- Layer 1: Monolith Copper Masterwork -->
-                    <div class="lenticular-layer layer-monolith" id="layerMonolith"></div>
-                    <!-- Layer 2: CAD Blueprint & Laser -->
-                    <div class="lenticular-layer layer-blueprint" id="layerBlueprint"></div>
-                    <!-- Layer 3: VIP Black Card -->
+                    <!-- Layer 1: Gold Luxury Emblem -->
+                    <div class="lenticular-layer layer-emblem" id="layerEmblem"></div>
+                    <!-- Layer 2: VIP Black Card on Marble -->
                     <div class="lenticular-layer layer-blackcard" id="layerBlackcard"></div>
                     
                     <!-- Lenticular Raster (Soviet Lenticular Micro-Ribs) -->
                     <div class="lenticular-raster"></div>
                     
-                    <!-- Holographic Foil Glare -->
-                    <div class="holographic-glare" id="cardGlare"></div>
+                    <!-- Metallic Gold Foil Glare -->
+                    <div class="metallic-glare" id="cardGlare"></div>
                     
                     <!-- Specular Light -->
                     <div class="specular-light" id="specularLight"></div>
@@ -649,16 +642,13 @@
             </div>
         </div>
 
-        <!-- Manual Layer Switcher -->
+        <!-- Manual Layer Switcher (2 Элитные стороны) -->
         <div class="layer-controls">
-            <button class="layer-btn" id="btnLayer1" onclick="selectLayer(1)">
-                <span>1</span> Узел FAR
+            <button class="layer-btn active" id="btnLayer1" onclick="selectLayer(1)">
+                <span>1</span> 👑 Золотой герб
             </button>
-            <button class="layer-btn active" id="btnLayer2" onclick="selectLayer(2)">
-                <span>2</span> Чертеж CAD
-            </button>
-            <button class="layer-btn" id="btnLayer3" onclick="selectLayer(3)">
-                <span>3</span> Black Card
+            <button class="layer-btn" id="btnLayer2" onclick="selectLayer(2)">
+                <span>2</span> 💳 Black Card
             </button>
             <button class="layer-btn" id="btnAutoSway" onclick="toggleAutoSway()" title="Вкл/Выкл покачивание">
                 🔄 Авто
@@ -700,7 +690,7 @@
                 <span>💾 Сохранить контакт в телефон</span>
             </button>
 
-            <a href="index.html" class="btn-action btn-full-site">
+            <a href="https://liga-masterov.vercel.app" class="btn-action btn-full-site">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
@@ -772,8 +762,7 @@
         // DOM Elements
         const stage = document.getElementById('cardStage');
         const card = document.getElementById('card3d');
-        const layerMonolith = document.getElementById('layerMonolith');
-        const layerBlueprint = document.getElementById('layerBlueprint');
+        const layerEmblem = document.getElementById('layerEmblem');
         const layerBlackcard = document.getElementById('layerBlackcard');
         const glare = document.getElementById('cardGlare');
         const toast = document.getElementById('toast');
@@ -785,7 +774,7 @@
         }
 
         function copyCardUrl() {
-            const url = 'https://liga-opytnykh-masterov-uz.netlify.app/card.html';
+            const url = 'https://liga-masterov.vercel.app/card';
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(url).then(() => {
                     showToast('Ссылка на визитку скопирована в буфер!');
@@ -798,8 +787,8 @@
         function shareCard() {
             const shareData = {
                 title: 'Улугбек Хакимов | Премиальная 3D-визитка мастера',
-                text: '💳 Интерактивная визитная карта («переливашка») мастера инженерной сантехники Улугбека Хакимова:',
-                url: 'https://liga-opytnykh-masterov-uz.netlify.app/card.html'
+                text: '💳 Интерактивная визитная карта мастера инженерной сантехники Улугбека Хакимова:',
+                url: 'https://liga-masterov.vercel.app/card'
             };
             if (navigator.share) {
                 navigator.share(shareData).catch(() => {});
@@ -816,61 +805,51 @@
         let isTouching = false;
         let hasGyroscope = false;
 
-        // Lenticular 3-Layer Blend & Parallax (Стерео-варио СССР с параллаксом и микролинзами)
+        // Чистое 2-кадровое оптическое переливание БЕЗ МУТИ
         function updateLenticular(tiltX, tiltY) {
             tiltX = Math.max(-1, Math.min(1, tiltX));
             tiltY = Math.max(-1, Math.min(1, tiltY));
 
             // 3D Tilt Transform
-            const rotateY = tiltX * 19; 
-            const rotateX = -tiltY * 13; 
+            const rotateY = tiltX * 16; 
+            const rotateX = -tiltY * 10; 
             card.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateZ(0)`;
 
-            // Holographic Spectral Foil Glare (Радужный голографический блик)
-            const glareX = (-tiltX * 90);
-            const glareY = (-tiltY * 90);
+            // Благородный золотистый отблеск
+            const glareX = (-tiltX * 85);
+            const glareY = (-tiltY * 85);
             card.style.setProperty('--glare-x', `${glareX}%`);
             card.style.setProperty('--glare-y', `${glareY}%`);
-            card.style.setProperty('--glare-opacity', `${0.35 + Math.abs(tiltX) * 0.55}`);
+            card.style.setProperty('--glare-opacity', `${0.35 + Math.abs(tiltX) * 0.45}`);
 
-            // Specular Light Spot
-            const lightX = 50 + tiltX * 42;
-            const lightY = 50 + tiltY * 42;
+            // Световой блик
+            const lightX = 50 + tiltX * 40;
+            const lightY = 50 + tiltY * 40;
             card.style.setProperty('--light-x', `${lightX}%`);
             card.style.setProperty('--light-y', `${lightY}%`);
 
-            // Parallax Shift for Physical 3D Depth
-            layerMonolith.style.transform = `translateX(${-tiltX * 8}px) scale(1.03)`;
-            layerBlueprint.style.transform = `translateX(${(-tiltX) * 3}px) scale(1.02)`;
-            layerBlackcard.style.transform = `translateX(${tiltX * 7}px) scale(1.04)`;
+            // Параллакс
+            if (layerEmblem) layerEmblem.style.transform = `translateX(${-tiltX * 6}px) scale(1.02)`;
+            if (layerBlackcard) layerBlackcard.style.transform = `translateX(${tiltX * 6}px) scale(1.02)`;
 
-            // Soviet Lenticular 3-Layer Threshold Blend
-            let wMonolith = 0;
-            let wBlueprint = 0;
+            // Чистое переключение ровно 2-х сторон
+            let wEmblem = 0;
             let wBlackcard = 0;
 
-            if (tiltX < -0.18) {
-                // Dominates Monolith (Узел FAR / Медь)
-                const factor = Math.min(1, (-tiltX - 0.18) / 0.38);
-                wMonolith = 0.55 + factor * 0.45;
-                wBlueprint = 1 - wMonolith;
+            if (tiltX <= -0.15) {
+                wEmblem = 1;
                 wBlackcard = 0;
-            } else if (tiltX > 0.18) {
-                // Dominates Black Card (Титановая карта мастера)
-                const factor = Math.min(1, (tiltX - 0.18) / 0.38);
-                wBlackcard = 0.55 + factor * 0.45;
-                wBlueprint = 1 - wBlackcard;
-                wMonolith = 0;
+            } else if (tiltX >= 0.15) {
+                wEmblem = 0;
+                wBlackcard = 1;
             } else {
-                // Center: Blueprint (Инженерный CAD-чертеж)
-                wBlueprint = 1;
-                wMonolith = 0;
-                wBlackcard = 0;
+                const factor = (tiltX + 0.15) / 0.30;
+                wBlackcard = factor;
+                wEmblem = 1 - factor;
             }
 
-            layerMonolith.style.opacity = wMonolith.toFixed(2);
-            layerBlueprint.style.opacity = wBlueprint.toFixed(2);
-            layerBlackcard.style.opacity = wBlackcard.toFixed(2);
+            if (layerEmblem) layerEmblem.style.opacity = wEmblem.toFixed(3);
+            if (layerBlackcard) layerBlackcard.style.opacity = wBlackcard.toFixed(3);
 
             updateActiveButton(tiltX);
         }
@@ -881,12 +860,12 @@
             document.querySelectorAll('.layer-btn').forEach(b => {
                 if (b.id !== 'btnAutoSway') b.classList.remove('active');
             });
-            if (tiltX < -0.2) {
-                document.getElementById('btnLayer1').classList.add('active');
-            } else if (tiltX > 0.2) {
-                document.getElementById('btnLayer3').classList.add('active');
+            if (tiltX <= 0) {
+                const b1 = document.getElementById('btnLayer1');
+                if (b1) b1.classList.add('active');
             } else {
-                document.getElementById('btnLayer2').classList.add('active');
+                const b2 = document.getElementById('btnLayer2');
+                if (b2) b2.classList.add('active');
             }
         }
 
@@ -895,13 +874,10 @@
             autoSway = false;
             updateAutoSwayButton();
             if (num === 1) {
-                targetTiltX = -0.7;
+                currentTiltX = -0.7;
             } else if (num === 2) {
-                targetTiltX = 0;
-            } else if (num === 3) {
-                targetTiltX = 0.7;
+                currentTiltX = 0.7;
             }
-            currentTiltX = targetTiltX;
             updateLenticular(currentTiltX, 0);
         }
 
