@@ -33,7 +33,7 @@
   <!-- Шрифты Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
   <!-- Безопасный обработчик ошибок медиа -->
   <script>
     function handleMediaError(elem) {
@@ -305,21 +305,23 @@
       display: block;
     }
 
-    /* Главный оффер */
+    /* Главный оффер с 3D-рельефом */
     .hero-title {
       font-family: var(--font-heading);
-      font-size: 22px;
+      font-size: clamp(21px, 4.8vw, 26px);
       font-weight: 900;
       line-height: 1.25;
       margin-bottom: 12px;
       text-transform: uppercase;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.2px;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 25px rgba(0, 242, 254, 0.25));
     }
 
     .hero-title .gradient-text {
-      background: linear-gradient(135deg, #ffffff 10%, var(--cyan-neon) 60%, var(--cyan-light) 100%);
+      background: linear-gradient(135deg, #ffffff 0%, #cffafe 35%, #00f2fe 75%, #0284c7 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.85)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.85));
     }
 
     .hero-subtitle {
@@ -1549,21 +1551,25 @@
               Выберите тему ролика (по 10 сек): лазерная привязка, сверка с чертежами, коллекторы и скрытый монтаж
             </div>
 
-            <!-- Чипы переключения 4 видео -->
+            <!-- Чипы переключения 5 видео -->
             <div class="video-chips-bar" id="designerChipsBar">
               <button class="video-chip active" type="button" onclick="selectDesignerVideo(0)">
+                <div class="chip-name"><span>🛡️</span><span>Риски & Трапы</span></div>
+                <div class="chip-meta">Мрамор 3D • 1 мин</div>
+              </button>
+              <button class="video-chip" type="button" onclick="selectDesignerVideo(1)">
                 <div class="chip-name"><span>📐</span><span>По чертежу</span></div>
                 <div class="chip-meta">Лазер • 10 сек</div>
               </button>
-              <button class="video-chip" type="button" onclick="selectDesignerVideo(1)">
+              <button class="video-chip" type="button" onclick="selectDesignerVideo(2)">
                 <div class="chip-name"><span>📏</span><span>Сверка и медь</span></div>
                 <div class="chip-meta">FAR / Rehau • 10 сек</div>
               </button>
-              <button class="video-chip" type="button" onclick="selectDesignerVideo(2)">
+              <button class="video-chip" type="button" onclick="selectDesignerVideo(3)">
                 <div class="chip-name"><span>🎛</span><span>Коллектор</span></div>
                 <div class="chip-meta">Манометры • 10 сек</div>
               </button>
-              <button class="video-chip" type="button" onclick="selectDesignerVideo(3)">
+              <button class="video-chip" type="button" onclick="selectDesignerVideo(4)">
                 <div class="chip-name"><span>🏗</span><span>Инженерия</span></div>
                 <div class="chip-meta">Коттеджи • 10 сек</div>
               </button>
@@ -1571,23 +1577,23 @@
 
             <!-- Единый легкий видеоплеер -->
             <div class="designer-player-card">
-              <video id="designerVideoPlayer" playsinline webkit-playsinline preload="none" poster="media/poster_designer_laser.jpg" src="media/designer_laser.mp4"></video>
+              <video id="designerVideoPlayer" playsinline webkit-playsinline preload="none" poster="media/poster_designer_3d_safety.jpg" src="media/designer_3d_safety.mp4"></video>
               
               <!-- Оверлей запуска Play -->
               <div class="designer-play-overlay" id="designerPlayOverlay" onclick="toggleDesignerVideoPlay()">
                 <div class="play-circle-btn">▶</div>
-                <div class="play-btn-label" id="designerPlayBtnLabel">Смотреть видео (10 сек со звуком)</div>
+                <div class="play-btn-label" id="designerPlayBtnLabel">Смотреть 3D-экспертизу для дизайнеров (со звуком)</div>
               </div>
             </div>
 
             <!-- Инфо-панель текущего видео -->
             <div class="designer-video-info-box">
               <div class="designer-info-header">
-                <span class="designer-info-badge" id="designerInfoBadge">📐 Точность до 1 мм</span>
-                <span class="designer-info-time" id="designerInfoTime">0:10 • Full HD</span>
+                <span class="designer-info-badge" id="designerInfoBadge">🛡️ Архитектурная безопасность</span>
+                <span class="designer-info-time" id="designerInfoTime">1:05 • 3D Экспертиза</span>
               </div>
               <div class="designer-info-desc" id="designerInfoDesc">
-                Выравнивание скрытых смесителей и инсталляций строго по лазерному нивелиру. Никаких перекосов выводов относительно швов керамогранита.
+                3D-разбор критических рисков дизайнерского санузла: правильный монтаж трапов, гидроизоляция и опрессовка узлов FAR давлением 16 бар.
               </div>
             </div>
           </div>
@@ -2047,6 +2053,15 @@
        ИНТЕРАКТИВНЫЙ ВИДЕО-ЦЕНТР ДИЗАЙНЕРА (SINGLE-PLAYER ARCHITECTURE)
        ========================================================================== */
     const designerVideos = [
+      {
+        id: 'safety_3d',
+        title: 'Главный страх: скрытые протечки под мрамором',
+        badge: '🛡️ Архитектурная безопасность',
+        time: '1:05 • 3D Экспертиза',
+        desc: '3D-разбор критических рисков дизайнерского санузла: правильный монтаж трапов, гидроизоляция и опрессовка узлов FAR давлением 16 бар.',
+        src: 'media/designer_3d_safety.mp4',
+        poster: 'media/poster_designer_3d_safety.jpg'
+      },
       {
         id: 'laser',
         title: 'Лазерная геометрия выводов',
